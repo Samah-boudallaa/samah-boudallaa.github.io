@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Samah Boudallaa, étudiante en Data Science. NexaDecide : 443 154 enregistrements transformés en décisions en moins de 5 secondes (Python, FastAPI, DuckDB, XGBoost, Mistral AI).">
+<meta property="og:title" content="Samah Boudallaa, Data Engineering & IA">
+<meta property="og:description" content="Du jeu de données à la décision en moins de 5 secondes. Portfolio, stages et projets.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Samah Boudallaa, Data Engineering & IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F5F8;--card:#fff;--ink:#0F1E2E;--mute:#52627A;--line:#D7DFE9;--blue:#2447E8;--gold:#E8A317;--soft:#E6ECFB;
+--d:'Bricolage Grotesque',Georgia,sans-serif;--s:'Instrument Sans',system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1522;--card:#13202F;--ink:#EAF0F8;--mute:#9AABC2;--line:#233449;--blue:#7E97FF;--gold:#F2B94B;--soft:#18284A}}
+:root[data-theme="dark"]{--bg:#0C1522;--card:#13202F;--ink:#EAF0F8;--mute:#9AABC2;--line:#233449;--blue:#7E97FF;--gold:#F2B94B;--soft:#18284A}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--s);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{font:800 18px var(--d);text-decoration:none}
+nav{display:flex;gap:22px;font-size:15px}
+nav a{text-decoration:none;color:var(--mute)}nav a:hover{color:var(--ink)}
+.cta{background:var(--blue);color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:600;display:inline-block}
+:root[data-theme="dark"] .cta{color:#0C1522}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .cta{color:#0C1522}}
+button.cta{border:0;font:600 17px/1.65 var(--s);cursor:pointer}
+button.ghost{background:transparent;color:inherit;font:500 17px/1.65 var(--s);cursor:pointer}
+.ghost{border:1.5px solid var(--line);padding:11px 22px;border-radius:999px;text-decoration:none;font-weight:500;display:inline-block}
+.ghost:hover{border-color:var(--blue)}
+section{padding:84px 0}
+h1{font:800 clamp(2.4rem,6.4vw,4.6rem)/1.04 var(--d);letter-spacing:-.03em;max-width:15em}
+h2{font:700 clamp(1.7rem,3.6vw,2.5rem)/1.15 var(--d);letter-spacing:-.02em;margin-bottom:12px}
+h3{font:700 1.2rem var(--d)}
+.lead{color:var(--mute);max-width:40em;font-size:1.1rem;margin:22px 0 30px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.status{display:inline-flex;gap:10px;align-items:center;font-size:14px;font-weight:500;background:var(--card);border:1px solid var(--line);padding:6px 14px;border-radius:999px;margin-bottom:26px}
+.status i{width:9px;height:9px;border-radius:50%;background:#1FA463;box-shadow:0 0 0 4px rgba(31,164,99,.18)}
+/* signature: decision-time comparison */
+.race{margin-top:52px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px}
+.race p{font-size:14px;color:var(--mute);margin-bottom:6px}
+.bar{height:44px;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-weight:600;font-size:15px;white-space:nowrap}
+.bar.old{background:var(--line);width:100%;margin-bottom:20px}
+.bar.new{background:var(--blue);color:#fff;width:1.4%;min-width:12px;padding:0;position:relative;overflow:visible}
+.bar.new span{position:absolute;left:calc(100% + 12px);color:var(--ink)}
+.race.go .bar.old{animation:shrink 1.4s .5s cubic-bezier(.7,0,.2,1) both}
+@keyframes shrink{from{width:100%}to{width:100%}}
+.race.go .bar.new{animation:grow 1.4s .5s cubic-bezier(.7,0,.2,1) both}
+@keyframes grow{from{width:100%}to{width:1.4%}}
+.race.go .bar.new span{animation:fade .5s 1.8s both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.race small{display:block;margin-top:16px;color:var(--mute);font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:22px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.kpi b{display:block;font:800 2rem/1 var(--d);color:var(--blue)}
+.kpi span{font-size:14px;color:var(--mute)}
+/* case study */
+.case{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.case>div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+.case h3{margin-bottom:8px;color:var(--blue)}
+.case p,.case li{color:var(--mute);font-size:15.5px}
+.case ul{padding-left:18px}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{font-size:13.5px;padding:5px 12px;border-radius:999px;background:var(--soft);font-weight:500}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:32px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;position:relative}
+.step b{display:block;font:700 15px var(--d);color:var(--blue);margin-bottom:4px}
+.step span{font-size:14px;color:var(--mute);line-height:1.5;display:block}
+@media(min-width:900px){.step:not(:last-child)::after{content:"\2192";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--blue);font-weight:700;background:var(--bg);width:12px;text-align:center;z-index:1}}
+.num{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin-top:22px}
+.num div{border-top:3px solid var(--gold);padding-top:10px}
+.num b{display:block;font:800 1.6rem/1.1 var(--d)}
+.num span{font-size:14px;color:var(--mute)}
+/* timeline */
+.tl{margin-top:34px;border-left:2px solid var(--line);padding-left:28px}
+.job{position:relative;padding-bottom:36px}
+.job::before{content:"";position:absolute;left:-37px;top:8px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--blue)}
+.job time{font-size:14px;color:var(--mute);font-weight:500}
+.job h3{margin:2px 0 8px}
+.job li{color:var(--mute);margin-left:18px;font-size:15.5px}
+/* projects */
+.proj{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;margin-top:30px}
+.p{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;text-decoration:none;display:flex;flex-direction:column;gap:8px;transition:border-color .2s}
+.p:hover{border-color:var(--blue)}
+.p p{color:var(--mute);font-size:15px;flex:1}
+.p small{color:var(--mute);font-size:13px}
+.p.big{grid-column:1/-1;background:var(--soft);border-color:transparent}
+/* skills + edu */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:30px}
+.sk dt{font:700 15px var(--d);margin-top:16px}
+.sk dd{color:var(--mute);font-size:15.5px}
+.edu div{border-left:3px solid var(--gold);padding-left:16px;margin-bottom:20px}
+.edu b{display:block}.edu span{color:var(--mute);font-size:15px}
+#contact{text-align:center;background:var(--ink);color:var(--bg);border-radius:28px;padding:64px 24px;margin:20px 0 70px}
+#contact h2{max-width:16em;margin:0 auto 14px}
+#contact p{color:inherit;opacity:.8;margin:0 auto 28px;max-width:34em}
+#contact .cta{background:var(--gold);color:#0F1E2E}
+#contact .ghost{border-color:rgba(255,255,255,.3);color:inherit}
+footer{text-align:center;font-size:14px;color:var(--mute);padding:0 0 40px}
+@media(max-width:760px){nav{display:none}.case,.two{grid-template-columns:1fr}section{padding:60px 0}.bar{font-size:13px}.bar.new span{font-size:13px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto}.bar.new{width:1.4%}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="logo" href="#top">Samah Boudallaa</a>
+<nav><a href="#nexadecide">NexaDecide</a><a href="#parcours">Parcours</a><a href="#projets">Projets</a><a href="#competences">Compétences</a></nav>
+<div class="row" style="gap:8px;flex-wrap:nowrap"><button id="th" class="ghost" type="button" aria-label="Changer de thème" style="padding:8px 12px;font-size:15px;background:transparent;color:inherit;font-family:inherit;cursor:pointer;line-height:1.2"></button><button id="lg" class="ghost" type="button" aria-label="Switch language" style="padding:8px 14px;font-size:15px;background:transparent;color:inherit;font-family:inherit;cursor:pointer">EN</button><a class="ghost" href="#contact" style="padding:8px 18px;font-size:15px;white-space:nowrap">Me contacter</a></div>
+</div></header>
+
+<main id="top">
+<section style="padding-top:72px"><div class="wrap">
+<div class="status">Data Science, Data Engineering et IA</div>
+<h1>Je transforme 443 154 lignes de données en décisions en moins de 5 secondes.</h1>
+<p class="lead">Je suis Samah, étudiante en Bachelor Data Science à l'EST Kelâa des Sraghna, après un DUT en Ingénierie des Données. Je conçois des solutions de bout en bout, de la base de données jusqu'à l'IA en production. Ce portfolio rassemble mon parcours, mes stages et les projets dont je suis la plus fière.</p>
+<div class="row"><button type="button" class="cta cv-btn">Télécharger mon CV</button><a class="ghost" href="mailto:s.boudallaa2659@uca.ac.ma">Écrivez-moi</a><a class="ghost" href="#nexadecide">Voir mon projet phare</a><a class="ghost" href="https://github.com/Samah-boudallaa" target="_blank" rel="noopener">GitHub</a><a class="ghost" href="https://www.linkedin.com/in/samah-boudallaa-92409a329" target="_blank" rel="noopener">LinkedIn</a></div>
+
+<div class="race" id="race" aria-label="Délai de décision avant et après NexaDecide">
+<p>Délai pour obtenir une décision commerciale</p>
+<div class="bar old">Avant : 3 à 5 jours</div>
+<div class="bar new" aria-hidden="true"><span>Avec NexaDecide : moins de 5 secondes</span></div>
+<small>Résultat mesuré sur le projet NexaDecide Maroc, chez D-Business Consulting.</small>
+</div>
+<div class="kpis">
+<div class="kpi"><b>3</b><span>stages réalisés</span></div>
+<div class="kpi"><b>×12</b><span>ROI estimé, NexaDecide</span></div>
+<div class="kpi"><b>&gt;91%</b><span>précision du modèle XGBoost</span></div>
+<div class="kpi"><b>&lt;100 ms</b><span>réponse grâce au cache DuckDB</span></div>
+</div>
+</div></section>
+
+<section style="padding-bottom:0"><div class="wrap">
+<h2>Ce que j'apporte à une équipe</h2>
+<div class="case">
+<div><h3>Rigueur</h3><p>J'audite, je teste sur des données réelles et je documente chaque anomalie avant de proposer une solution corrective.</p></div>
+<div><h3>Vision de bout en bout</h3><p>De la modélisation de la base de données jusqu'à l'interface, je sais livrer une solution complète et utilisable.</p></div>
+<div><h3>Impact mesurable</h3><p>Je pars du besoin métier et je mesure le résultat : délai de décision, performance, précision.</p></div>
+</div></div></section>
+
+<section id="nexadecide"><div class="wrap">
+<h2>NexaDecide : un moteur de décision autonome</h2>
+<p class="lead" style="margin-bottom:0">Projet conçu et développé en stage chez D-Business Consulting (avril à juin 2026), pour le marché marocain. Les décideurs attendaient plusieurs jours pour croiser leurs données de ventes et agir. NexaDecide centralise les données, les analyse et propose la décision à prendre, en quelques secondes.</p>
+
+<div class="flow" role="list" aria-label="Architecture de NexaDecide">
+<div class="step" role="listitem"><b>Sources</b><span>SQL Server et autres solutions : 443 154 enregistrements</span></div>
+<div class="step" role="listitem"><b>Pipeline ETL</b><span>Extraction, nettoyage, intégration et persistance en Parquet</span></div>
+<div class="step" role="listitem"><b>Cache DuckDB</b><span>Requêtes analytiques en moins de 100 ms</span></div>
+<div class="step" role="listitem"><b>API FastAPI</b><span>9 endpoints qui exposent les données et les modèles</span></div>
+<div class="step" role="listitem"><b>Intelligence artificielle</b><span>XGBoost pour la prédiction, Mistral AI avec RAG (LangChain) pour les recommandations</span></div>
+<div class="step" role="listitem"><b>Interface Streamlit</b><span>10 pages, cartographie GPS et lien avec l'ERP Odoo (XML-RPC)</span></div>
+</div>
+
+<div class="num">
+<div><b>59</b><span>vendeurs suivis</span></div>
+<div><b>40 987</b><span>clients analysés</span></div>
+<div><b>373 916</b><span>commandes traitées</span></div>
+<div><b>&gt;91 %</b><span>précision du modèle XGBoost</span></div>
+<div><b>×12</b><span>ROI estimé</span></div>
+</div>
+
+<div class="case">
+<div><h3>Le problème</h3><p>Les données étaient réparties entre plusieurs systèmes. Les analyses se faisaient à la main, et la décision arrivait 3 à 5 jours après le besoin.</p></div>
+<div><h3>Mon rôle</h3><p>Conception et développement de bout en bout : pipeline ETL, optimisation des performances avec le cache, API, intégration des modèles d'IA et interface utilisateur.</p></div>
+<div><h3>L'impact</h3><p>Le délai de décision passe de 3 à 5 jours à moins de 5 secondes. Un décideur interroge ses données et obtient une analyse prédictive et des recommandations, sans passer par un analyste.</p></div>
+</div>
+<div class="stack"><span class="chip">Python</span><span class="chip">SQL Server</span><span class="chip">DuckDB</span><span class="chip">Parquet</span><span class="chip">FastAPI</span><span class="chip">Streamlit</span><span class="chip">XGBoost</span><span class="chip">LangChain</span><span class="chip">Mistral AI</span><span class="chip">Odoo</span></div>
+<div class="row" style="margin-top:24px"><a class="ghost" href="https://github.com/Samah-boudallaa/nexadecide-decision-system" target="_blank" rel="noopener">Voir le code sur GitHub</a></div>
+</div></section>
+
+<section id="parcours"><div class="wrap">
+<h2>Trois stages, trois façons d'apporter de la valeur</h2>
+<div class="tl">
+<div class="job"><time>Juin à août 2026, Casablanca</time><h3>Stagiaire Data & BI, Groupe A. Lazrak Immobilier</h3><ul>
+<li>Audit du code d'un simulateur budgétaire immobilier : incohérences et bugs de calcul identifiés.</li>
+<li>Validation sur données réelles (Clé Blanche, Anfa Atlantique) pour éviter les confusions entre projets.</li>
+<li>Anomalies remontées aux équipes techniques avec des solutions correctives concrètes.</li>
+<li>Formule de calcul du cashout (atterrissage budgétaire) intégrée au Business Plan et généralisable à tous les projets.</li></ul></div>
+<div class="job"><time>Avril à juin 2026, Casablanca</time><h3>Stagiaire Data Engineering & IA, D-Business Consulting</h3><ul>
+<li>Conception complète de NexaDecide, de l'ETL à l'IA générative (voir ci-dessus).</li></ul></div>
+<div class="job"><time>Juillet à août 2025, Kelâa des Sraghna</time><h3>Stagiaire développement web, Municipalité de Kelâa des Sraghna</h3><ul>
+<li>GestLotissement : digitalisation d'un processus 100 % papier, de l'analyse des besoins à l'application (Python, Flask, MySQL, UML).</li></ul></div>
+</div></div></section>
+
+<section id="projets"><div class="wrap">
+<h2>Projets sélectionnés</h2>
+<div class="proj">
+<a class="p big" href="https://github.com/Samah-boudallaa/smart-data-pipeline-pfe" target="_blank" rel="noopener"><h3>Smart Data Pipeline, projet de fin d'études</h3><p>Pipeline auto-adaptatif en flux temps réel, avec une architecture Big Data événementielle.</p><small>Python, Spark, Kafka</small></a>
+<a class="p" href="https://github.com/Samah-boudallaa/diabetes-dashboard" target="_blank" rel="noopener"><h3>Dashboard Diabète</h3><p>Prédiction par Random Forest sur 768 patients, avec indicateurs en temps réel.</p><small>Scikit-learn, Streamlit, Plotly</small></a>
+<a class="p" href="https://github.com/Samah-boudallaa/ai-data-analyst-platform" target="_blank" rel="noopener"><h3>AI Data Analyst Platform</h3><p>Analyse de données pilotée par l'IA : rapports automatiques et détection d'anomalies.</p><small>Python, IA</small></a>
+<a class="p" href="https://github.com/Samah-boudallaa/InsightFlow" target="_blank" rel="noopener"><h3>InsightFlow</h3><p>Outil de business intelligence avec tableaux de bord dynamiques.</p><small>Python, SQL, BI</small></a>
+<a class="p" href="https://github.com/Samah-boudallaa/big-data-project" target="_blank" rel="noopener"><h3>Big Data Project</h3><p>Traitement de données volumineuses en Python.</p><small>Python, Big Data</small></a>
+<a class="p" href="https://github.com/Samah-boudallaa/codveda-ml-internship" target="_blank" rel="noopener"><h3>Codveda ML Internship</h3><p>Notebooks de machine learning réalisés pendant un programme de stage virtuel.</p><small>Jupyter, Scikit-learn</small></a>
+<a class="p" href="https://github.com/Samah-boudallaa/ML_REVISION" target="_blank" rel="noopener"><h3>ML Revision et DataViz Guide</h3><p>Deux guides de référence : algorithmes de machine learning et choix de visualisations.</p><small>Python, Matplotlib, Seaborn</small></a>
+<a class="p" href="https://github.com/Samah-boudallaa/GestLotissement" target="_blank" rel="noopener"><h3>GestLotissement</h3><p>Application de gestion de lotissements pour la municipalité, avec modélisation UML.</p><small>Python, Flask, MySQL</small></a>
+</div></div></section>
+
+<section id="competences"><div class="wrap">
+<div class="two">
+<div><h2>Compétences</h2><dl class="sk">
+<dt>Langages</dt><dd>Python, SQL, C, PHP, R</dd>
+<dt>Data engineering</dt><dd>ETL, SQL Server, MySQL, DuckDB, Parquet, Spark, Kafka, REST API</dd>
+<dt>IA et machine learning</dt><dd>Scikit-learn, XGBoost, Mistral AI, LangChain, RAG, NLP, Pandas, NumPy</dd>
+<dt>Visualisation</dt><dd>Power BI, Streamlit, Plotly</dd>
+<dt>Outils</dt><dd>Git, GitHub, Docker, FastAPI, Flask</dd></dl></div>
+<div class="edu"><h2>Formation</h2>
+<div><b>Bachelor Data Science, EST Kelâa des Sraghna</b><span>2026 à 2027, admission sur concours</span></div>
+<div><b>DUT Ingénierie des Données, Université Cadi Ayyad</b><span>2024 à 2026</span></div>
+<dl class="sk"><dt>Langues</dt><dd>Arabe (langue maternelle), français (B2), anglais (C1)</dd>
+<dt>Certifications</dt><dd>Power BI (Great Learning), Generative AI Essentials (Microsoft), NLP et Text Mining, Microsoft 365 Copilot, Hugging Face Project</dd></dl></div>
+</div></div></section>
+
+<div class="wrap"><section id="contact">
+<h2>Un projet, une question, une idée ?</h2>
+<p>Je serai ravie d'échanger sur la data, l'IA ou un projet en commun. Écrivez-moi, je réponds rapidement.</p>
+<div class="row" style="justify-content:center"><a class="cta" href="mailto:s.boudallaa2659@uca.ac.ma">s.boudallaa2659@uca.ac.ma</a><button type="button" class="ghost cv-btn">Télécharger mon CV</button><a class="ghost" href="https://www.linkedin.com/in/samah-boudallaa-92409a329" target="_blank" rel="noopener">LinkedIn</a><a class="ghost" href="https://github.com/Samah-boudallaa" target="_blank" rel="noopener">GitHub</a></div>
+</section></div>
+</main>
+<footer>Samah Boudallaa, Kelâa des Sraghna, Maroc</footer>
+<script>document.getElementById('race').classList.add('go')</script>
+<script>(function(){var T={"Télécharger mon CV":"Download my CV","Python, IA":"Python, AI","Visualisation":"Visualization","DUT Ingénierie des Données, Université Cadi Ayyad":"DUT in Data Engineering, Cadi Ayyad University","Bachelor Data Science, EST Kelâa des Sraghna":"Bachelor in Data Science, EST Kelâa des Sraghna","Parcours": "Experience", "Projets": "Projects", "Compétences": "Skills", "Me contacter": "Contact me", "Data Science, Data Engineering et IA": "Data Science, Data Engineering and AI", "Je transforme 443 154 lignes de données en décisions en moins de 5 secondes.": "I turn 443,154 rows of data into decisions in under 5 seconds.", "Je suis Samah, étudiante en Bachelor Data Science à l'EST Kelâa des Sraghna, après un DUT en Ingénierie des Données. Je conçois des solutions de bout en bout, de la base de données jusqu'à l'IA en production. Ce portfolio rassemble mon parcours, mes stages et les projets dont je suis la plus fière.": "I'm Samah, a Data Science Bachelor student at EST Kelâa des Sraghna, after a DUT in Data Engineering. I build end-to-end solutions, from the database to AI in production. This portfolio brings together my path, my internships and the projects I'm proudest of.", "Écrivez-moi": "Email me", "Voir mon projet phare": "See my flagship project", "Délai pour obtenir une décision commerciale": "Time to get a business decision", "Avant : 3 à 5 jours": "Before: 3 to 5 days", "Avec NexaDecide : moins de 5 secondes": "With NexaDecide: under 5 seconds", "Résultat mesuré sur le projet NexaDecide Maroc, chez D-Business Consulting.": "Result measured on the NexaDecide Morocco project at D-Business Consulting.", "stages réalisés": "internships completed", "ROI estimé, NexaDecide": "estimated ROI, NexaDecide", "précision du modèle XGBoost": "XGBoost model accuracy", "réponse grâce au cache DuckDB": "response time thanks to the DuckDB cache", "Ce que j'apporte à une équipe": "What I bring to a team", "Rigueur": "Rigor", "J'audite, je teste sur des données réelles et je documente chaque anomalie avant de proposer une solution corrective.": "I audit, test on real data and document every anomaly before proposing a fix.", "Vision de bout en bout": "End-to-end vision", "De la modélisation de la base de données jusqu'à l'interface, je sais livrer une solution complète et utilisable.": "From database modeling to the user interface, I deliver complete, usable solutions.", "Impact mesurable": "Measurable impact", "Je pars du besoin métier et je mesure le résultat : délai de décision, performance, précision.": "I start from the business need and measure the result: decision time, performance, accuracy.", "NexaDecide : un moteur de décision autonome": "NexaDecide: an autonomous decision engine", "Projet conçu et développé en stage chez D-Business Consulting (avril à juin 2026), pour le marché marocain. Les décideurs attendaient plusieurs jours pour croiser leurs données de ventes et agir. NexaDecide centralise les données, les analyse et propose la décision à prendre, en quelques secondes.": "Designed and built during my internship at D-Business Consulting (April to June 2026) for the Moroccan market. Decision-makers waited several days to cross-check their sales data and act. NexaDecide centralizes the data, analyzes it and recommends the decision to take, in seconds.", "SQL Server et autres solutions : 443 154 enregistrements": "SQL Server and other systems: 443,154 records", "Extraction, nettoyage, intégration et persistance en Parquet": "Extraction, cleaning, integration and Parquet persistence", "Cache DuckDB": "DuckDB cache", "Requêtes analytiques en moins de 100 ms": "Analytical queries in under 100 ms", "9 endpoints qui exposent les données et les modèles": "9 endpoints exposing data and models", "Intelligence artificielle": "Artificial intelligence", "XGBoost pour la prédiction, Mistral AI avec RAG (LangChain) pour les recommandations": "XGBoost for prediction, Mistral AI with RAG (LangChain) for recommendations", "Interface Streamlit": "Streamlit interface", "10 pages, cartographie GPS et lien avec l'ERP Odoo (XML-RPC)": "10 pages, GPS mapping and Odoo ERP link (XML-RPC)", "vendeurs suivis": "sellers tracked", "40 987": "40,987", "clients analysés": "customers analyzed", "373 916": "373,916", "commandes traitées": "orders processed", "ROI estimé": "estimated ROI", "Le problème": "The problem", "Les données étaient réparties entre plusieurs systèmes. Les analyses se faisaient à la main, et la décision arrivait 3 à 5 jours après le besoin.": "Data was spread across several systems. Analyses were done by hand, and decisions came 3 to 5 days after the need.", "Mon rôle": "My role", "Conception et développement de bout en bout : pipeline ETL, optimisation des performances avec le cache, API, intégration des modèles d'IA et interface utilisateur.": "End-to-end design and development: ETL pipeline, performance optimization with caching, API, AI model integration and user interface.", "L'impact": "The impact", "Le délai de décision passe de 3 à 5 jours à moins de 5 secondes. Un décideur interroge ses données et obtient une analyse prédictive et des recommandations, sans passer par un analyste.": "Decision time drops from 3 to 5 days to under 5 seconds. A decision-maker queries their data and gets predictive analysis and recommendations, without going through an analyst.", "Voir le code sur GitHub": "View the code on GitHub", "Trois stages, trois façons d'apporter de la valeur": "Three internships, three ways of adding value", "Juin à août 2026, Casablanca": "June to August 2026, Casablanca", "Avril à juin 2026, Casablanca": "April to June 2026, Casablanca", "Juillet à août 2025, Kelâa des Sraghna": "July to August 2025, Kelâa des Sraghna", "Stagiaire Data & BI, Groupe A. Lazrak Immobilier": "Data & BI Intern, Groupe A. Lazrak Immobilier", "Stagiaire Data Engineering & IA, D-Business Consulting": "Data Engineering & AI Intern, D-Business Consulting", "Stagiaire développement web, Municipalité de Kelâa des Sraghna": "Web Development Intern, Municipality of Kelâa des Sraghna", "Audit du code d'un simulateur budgétaire immobilier : incohérences et bugs de calcul identifiés.": "Audited the code of a real-estate budget simulator: identified inconsistencies and calculation bugs.", "Validation sur données réelles (Clé Blanche, Anfa Atlantique) pour éviter les confusions entre projets.": "Validated on real data (Clé Blanche, Anfa Atlantique) to prevent mix-ups between projects.", "Anomalies remontées aux équipes techniques avec des solutions correctives concrètes.": "Reported anomalies to technical teams with concrete corrective solutions.", "Formule de calcul du cashout (atterrissage budgétaire) intégrée au Business Plan et généralisable à tous les projets.": "Cashout (budget landing) formula built into the Business Plan, reusable across all projects.", "Conception complète de NexaDecide, de l'ETL à l'IA générative (voir ci-dessus).": "Full design of NexaDecide, from ETL to generative AI (see above).", "GestLotissement : digitalisation d'un processus 100 % papier, de l'analyse des besoins à l'application (Python, Flask, MySQL, UML).": "GestLotissement: digitized a 100% paper-based process, from requirements analysis to the application (Python, Flask, MySQL, UML).", "Projets sélectionnés": "Selected projects", "Smart Data Pipeline, projet de fin d'études": "Smart Data Pipeline, final-year project", "Pipeline auto-adaptatif en flux temps réel, avec une architecture Big Data événementielle.": "Self-adaptive real-time pipeline with an event-driven Big Data architecture.", "Dashboard Diabète": "Diabetes Dashboard", "Prédiction par Random Forest sur 768 patients, avec indicateurs en temps réel.": "Random Forest prediction on 768 patients, with real-time indicators.", "Analyse de données pilotée par l'IA : rapports automatiques et détection d'anomalies.": "AI-driven data analysis: automatic reports and anomaly detection.", "Outil de business intelligence avec tableaux de bord dynamiques.": "Business intelligence tool with dynamic dashboards.", "Traitement de données volumineuses en Python.": "Large-scale data processing in Python.", "Notebooks de machine learning réalisés pendant un programme de stage virtuel.": "Machine learning notebooks built during a virtual internship program.", "ML Revision et DataViz Guide": "ML Revision and DataViz Guide", "Deux guides de référence : algorithmes de machine learning et choix de visualisations.": "Two reference guides: machine learning algorithms and chart selection.", "Application de gestion de lotissements pour la municipalité, avec modélisation UML.": "Land-subdivision management app for the municipality, with UML modeling.", "Langages": "Languages", "IA et machine learning": "AI and machine learning", "Outils": "Tools", "Formation": "Education", "2026 à 2027, admission sur concours": "2026 to 2027, admitted via competitive entrance exam", "2024 à 2026": "2024 to 2026", "Langues": "Spoken languages", "Arabe (langue maternelle), français (B2), anglais (C1)": "Arabic (native), French (B2), English (C1)", "Power BI (Great Learning), Generative AI Essentials (Microsoft), NLP et Text Mining, Microsoft 365 Copilot, Hugging Face Project": "Power BI (Great Learning), Generative AI Essentials (Microsoft), NLP and Text Mining, Microsoft 365 Copilot, Hugging Face Project", "Un projet, une question, une idée ?": "A project, a question, an idea?", "Je serai ravie d'échanger sur la data, l'IA ou un projet en commun. Écrivez-moi, je réponds rapidement.": "I'd love to talk about data, AI or a joint project. Write to me, I reply quickly.", "Samah Boudallaa, Kelâa des Sraghna, Maroc": "Samah Boudallaa, Kelâa des Sraghna, Morocco"},N=[],w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),n,H=document.documentElement,b=document.getElementById('lg');
+while(n=w.nextNode()){var t=n.nodeValue.trim();if(T[t])N.push([n,n.nodeValue,n.nodeValue.replace(t,T[t])])}
+var A=[['#race','Délai de décision avant et après NexaDecide','Decision time before and after NexaDecide'],['.flow','Architecture de NexaDecide','NexaDecide architecture']];
+function set(l){N.forEach(function(x){x[0].nodeValue=l=='en'?x[2]:x[1]});A.forEach(function(a){var e=document.querySelector(a[0]);if(e)e.setAttribute('aria-label',l=='en'?a[2]:a[1])});
+H.lang=l;b.textContent=l=='en'?'FR':'EN';try{localStorage.setItem('lg',l)}catch(e){}}
+var l='fr';try{l=localStorage.getItem('lg')||''}catch(e){}
+if(!l)l=(navigator.language||'').slice(0,2)=='en'?'en':'fr';
+b.onclick=function(){set(H.lang=='en'?'fr':'en')};set(l);})();</script>
+<script>(function(){var H=document.documentElement,b=document.getElementById('th'),m=window.matchMedia('(prefers-color-scheme: dark)');
+function cur(){return H.getAttribute('data-theme')||(m.matches?'dark':'light')}
+function paint(){var d=cur()=='dark';b.textContent=d?'\u2600':'\u263E';b.setAttribute('aria-label',H.lang=='en'?(d?'Switch to light theme':'Switch to dark theme'):(d?'Passer au thème clair':'Passer au thème sombre'))}
+var s='';try{s=localStorage.getItem('th')||''}catch(e){}
+if(s)H.setAttribute('data-theme',s);
+b.onclick=function(){var n=cur()=='dark'?'light':'dark';H.setAttribute('data-theme',n);try{localStorage.setItem('th',n)}catch(e){}paint()};
+document.getElementById('lg').addEventListener('click',function(){setTimeout(paint,0)});paint();})();</script>
+<script>(function(){var CV='JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3VyY2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUiAvRjMgNyAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL0Jhc2VGb250IC9IZWx2ZXRpY2EgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YxIC9TdWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKMyAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYS1Cb2xkIC9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5nIC9OYW1lIC9GMiAvU3VidHlwZSAvVHlwZTEgL1R5cGUgL0ZvbnQKPj4KZW5kb2JqCjQgMCBvYmoKPDwKL0EgPDwKL1MgL1VSSSAvVHlwZSAvQWN0aW9uIC9VUkkgKG1haWx0bzpzLmJvdWRhbGxhYTI2NTlAdWNhLmFjLm1hKQo+PiAvQm9yZGVyIFsgMCAwIDAgXSAvUmVjdCBbIDE4MC42OTQ2IDc1MS4zMTQgMjk0Ljc5NTQgNzYxLjg3NCBdIC9TdWJ0eXBlIC9MaW5rIC9UeXBlIC9Bbm5vdAo+PgplbmRvYmoKNSAwIG9iago8PAovQSA8PAovUyAvVVJJIC9UeXBlIC9BY3Rpb24gL1VSSSAoaHR0cHM6Ly9naXRodWIuY29tL1NhbWFoLWJvdWRhbGxhYSkKPj4gL0JvcmRlciBbIDAgMCAwIF0gL1JlY3QgWyAxNDYuODIzNCA3NDAuMzE0IDI2MS4yNzYyIDc1MC44NzQgXSAvU3VidHlwZSAvTGluayAvVHlwZSAvQW5ub3QKPj4KZW5kb2JqCjYgMCBvYmoKPDwKL0EgPDwKL1MgL1VSSSAvVHlwZSAvQWN0aW9uIC9VUkkgKGh0dHBzOi8vd3d3LmxpbmtlZGluLmNvbS9pbi9zYW1haC1ib3VkYWxsYWEtOTI0MDlhMzI5KQo+PiAvQm9yZGVyIFsgMCAwIDAgXSAvUmVjdCBbIDI3My4zNDk4IDc0MC4zMTQgNDQ4LjQ1MjIgNzUwLjg3NCBdIC9TdWJ0eXBlIC9MaW5rIC9UeXBlIC9Bbm5vdAo+PgplbmRvYmoKNyAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYS1PYmxpcXVlIC9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5nIC9OYW1lIC9GMyAvU3VidHlwZSAvVHlwZTEgL1R5cGUgL0ZvbnQKPj4KZW5kb2JqCjggMCBvYmoKPDwKL0Fubm90cyBbIDQgMCBSIDUgMCBSIDYgMCBSIF0gL0NvbnRlbnRzIDEyIDAgUiAvTWVkaWFCb3ggWyAwIDAgNTk1LjI3NTYgODQxLjg4OTggXSAvUGFyZW50IDExIDAgUiAvUmVzb3VyY2VzIDw8Ci9Gb250IDEgMCBSIC9Qcm9jU2V0IFsgL1BERiAvVGV4dCAvSW1hZ2VCIC9JbWFnZUMgL0ltYWdlSSBdCj4+IC9Sb3RhdGUgMCAKICAvVHJhbnMgPDwKCj4+IC9UeXBlIC9QYWdlCj4+CmVuZG9iago5IDAgb2JqCjw8Ci9QYWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgMTEgMCBSIC9UeXBlIC9DYXRhbG9nCj4+CmVuZG9iagoxMCAwIG9iago8PAovQXV0aG9yIChTYW1haCBCb3VkYWxsYWEpIC9DcmVhdGlvbkRhdGUgKEQ6MjAyNjEwMDQxMzAyMjgrMDAnMDAnKSAvQ3JlYXRvciAoXCh1bnNwZWNpZmllZFwpKSAvS2V5d29yZHMgKCkgL01vZERhdGUgKEQ6MjAyNjEwMDQxMzAyMjgrMDAnMDAnKSAvUHJvZHVjZXIgKFJlcG9ydExhYiBQREYgTGlicmFyeSAtIFwob3BlbnNvdXJjZVwpKSAKICAvU3ViamVjdCAoXCh1bnNwZWNpZmllZFwpKSAvVGl0bGUgKENWIC0gU2FtYWggQm91ZGFsbGFhKSAvVHJhcHBlZCAvRmFsc2UKPj4KZW5kb2JqCjExIDAgb2JqCjw8Ci9Db3VudCAxIC9LaWRzIFsgOCAwIFIgXSAvVHlwZSAvUGFnZXMKPj4KZW5kb2JqCjEyIDAgb2JqCjw8Ci9GaWx0ZXIgWyAvQVNDSUk4NURlY29kZSAvRmxhdGVEZWNvZGUgXSAvTGVuZ3RoIDM3OTEKPj4Kc3RyZWFtCkdhdWBWPWBZS1EmcTlTWWFIcG8pKlJzQk9uOClvVyRSKEg2LFY4SDE0UmM2NiQuWXVYa3NITFJrL1ZDUG9gOWx0Wks4QC9MOE1TX28pLyglV24nR1NeUkcoTSpXZlM/aTs/MUw5byRoMkJWbzdVQSx0SC1YJDlzKmVXWjt1QldnWzNpJkluITNbUD9TXThFSiRRTDA2dGxdLFtuVEdXXSxSMyYwST0jZCYtWENBc2pgImRDQDxFX1tJQlJcMyooIyprOl1LXU9hQ1s7VDFHQXFRbm5eOEtmSS9hWExyZGAsKmksJiE+J14+ZiJoJ0pHKlhUW0JcPnVyUlw/U2E6UW8qaGFrODxZZiJYXTtyXkxKJDRvYTReO19RZEU8UzNKMjRWJ0c5Ti1MbUlOS3FHR09qNVYuMTtrTVc4S1wuYHE3XltPLCZmLCRPcFxRMkE7cW5Bb3BlUCk8dWwqYicjUTxlNCVlWEUyME5bXjhDWmFhLEErQ0ltUC9hcEhuUzEvOVdLTTYuLiFbcDs1WHRQOlUwaD8tNDclbl8sJSFWI2crXFVra2FvaVpIKkFFJycqRUxTOigjKEU6cj5AKDs3PUpVZlBeKzc/TycwUWxjUGhmO2taRTk8LCdyL1QmXW9TSjNtVF8pU3BAb0hISGFhTDdiTEtSJWsrS1pRbWM9MDY8K1JxJyVJImVMMl5wTUhaUl5aZTVAOGc8Y10iYD1rODomcHJOP0dsZWhEQjc8NCtvOVwzPE1jUU9ZPzBdImIlRDQ+bFdMcV44Z0ciJ3EkPj1HNU1ARGpXaXJsTWNybm5EKWJDYS9Fbz9tPV46Ui1NN2g2dV9zQSFeKz5hPj4+VyNNWmkvYmhXLFBaYF9mLGduWjMxOVNlbVdAK2NnWWlxTFp1XEduP2tyUEJWdS1NNCooUEtPcFJNTFopNT8hSjxpPjZiQmUlLmBHQFw9JmlPc146Ky5WN1Zta2xgNjBYcEpgZS10a2tiX14wVFUzN2RqXCphXmxYXUxhQTViXk4scj0kVi9BdWIiOEpaQUtxT2pzSnUiI11BS2tjY0xtM1wtP0NAZFgiQFlmL1JRKmk8ZUk/ZD02WmtROk9sR3BbalwoYHRXQUkuOCZxbU5HakIpZEZOWnQyJFg2Q1FWWnNfViFeJCxYRkVZNEhzLiVUZD5xWGI1MlwuRyQkLy5lNV5LPVc9cWxvYEhmLC43Ykc3KkA7UTY8bCZYcGwmQi9eKi11OkEuZVowSlFvQzxNaiwicTNiO1dqM1VuJT9fTVVJOWlmR1wyNmVZIl9ySm07cXJJJExbMiFxYS9eJF11bm51PWJtcE1bNDxdN1dFRCdQV0xCOWVdalNdUidFOD5ALGpWPjhDNmhpKGpcPXJeLWhFS3Jbc08zcEssX1toRWJPWl9gYj8tcl09ZT5rRTZZJGdJby8xYktDbEsqaSU+UV1zV3U1N0hTPyNWXSFIZzxJRWJYZkBEaiZvXy1VL1A0OWxOLWBsVEJHNjtZV0IhdCRCdFovZjcsbGtXYSZCbDFFaGpZY2g4JlhFZHU/PS9wPVwxZVlHYU1fOWBzM0suUnBhWXBtJ3M8UmNESkNFTEMqOWlNY0VAVCcxa28uOmtWPygiR2EwNGRlNlhgLkg9JiwpWk5dImQ6cGBtJFNMcVFHQ0QkLFM1JUA1IiNwbS5tYUE5R3I3KWYnIXVdRDhsOWwyOU1dbUAjWE9TYDBEM3MrNm85dG5CaDFqYE06ZikkX0ltVThUamk7NUEoWFxuPWc6QC9jNE4mXmBdUEc/L0JUQ3RLIkQ1ZCtkSloqUk1nXU8tXWhHTiZbMlEiXGRhKzFhMiQkazEpR0VVKi0hP18tIUhINUklR0R0Q0UvL29GXVQsUCchTlAhRCplWkpkTjpUdDotXUI2PFleJVxQO1ZacT8rY1Y4TytXU2hXPlpPSS5KLDImaiFaUygnJm1TVWpmR2hSRjl0PCo3I1RMJjdtOUgrIz1VOHFUPnRaJ0ZxS2RbbFBJJ2g7dFJcXE1FKSgsNzNLTCVBYlQvT1ZDZSsvIUU1K2xDcnVGXVsnXkp1QlJga2RbQiwkaSJeSV9eLEQ6SV5UcHNiNDxeW2ZYPCNhSUBXLCE8ai0nJ2YmY0BTclBZQWZIciYjN3FvW2RXWk5ePDxrOilKOig0N2hPZj1AK3IzKWtZMG1IK1NLNT5pI3VVNlotUm5uNzhTVC5LWVwsWWdPL1x0aj9vZVhIdWkzUGIoVVJKa2ZBQDo7YUU4KVMwcDFrRC9sN2JyWU4zLUYlITVhbiRILllYJ28hPyVpVFVnVTxvWE1HWFtvZWlDVldsNCkoQzItQUlpa2chdFs9JjtbVklaNmJeZ1FUdUptWDVbJjhNYE4kUDokYSsrKFVedVtSJE9eODI/L10kKGw8b1UrMmkwOV8wNWFrNzFPKGplMFs8PlJhXWpfX1o3XD1JSDlZYiVGUj40aWMmJkUrImY1OUIlXlNqXURVI1QxaFQ5UixzOUZrJmszPydMbyNxLDNXLTI3YUc9UTpSJigxcDRGI3EjQzMlVFtUUTw2SUpONiVDOFRHOzMiTWlLJmA1clJZLVtPaGYoWUgxVV1QSVlKKUllNUdlLSE9JWs6SSlnZDEzdFw7Z0EsT28pWGM4U1UyXC1aSyhEZU1gQXVmbVpWYEVPVC84NWdYRyguSEhJPyZpSk0yLEk4M3VmcUpfUik8OU5IUFg8W0xvVmZyUDQwaC9AUDBHJCg1VlhBTHFKZCFHTj8oTC1KMTFlUWpwLilnRFwuLjlLJl9ucXMocnVZPyoxWWlGM2lBZVRuaHAkMi5LRiJmN3IwNjFVaGhFLmowTG9ENTplIXAhPkAjM1o6WWE3cjV0L05Rb15FR0RrKyxwSURmSFQiXzQ3VVJRVkVxXys6XiEvTCMjNU0iJkU3ajVuKStHQmBhRkwqUHI/RC83XDE2IzRYdUJeUW9zYzlbc0ZXQDw9Y1tSUW5ccWAkWE8kPFsiQDU1XkBBS0pFRktlXCwhT1woWShob3JuUWY1PSouIUNnNlRYOkRmRnBVNyRkOG8wLVpQQTZrLCQqSm9pcDVvWStvNUtBOUJNVjBGRVlDPilYcD9MZGBrWUpGODRfPF5rRC1kXEc4KDUjPmdIVzxZNCpaRmQhSy4zJkxzNShEKj9SUl80U2RCTUNmbFMqZiQraFsvIUNnYjM9Vj8/KCtXUjZbUTNEbi02JCg9Z2BQZWJnOjk7UEQ3OWFNJixNckhVYC5wUllyLz04KEElJXQ0b0t0TVo8Ykd0Ti0uKElOTE50NUhoNDNNNEcrWDBxOWYiaCo/bSJcOVU7Il82TWdjKF1DcEpcWUs4LktNNDIsYmtuME8mYk9FXzVlI3VMYjJYWyxERSdtaGVybmlhQ1NYWj4uNC5PW0tpPjxvdGNGYEVBTFFDOV1FVEIhIUc2TnVgKyppIkg7bV4xKlE6JmZkaVs0VydScCphIk0lQiUpPnVNY19kQktILkgnJ1wpOl9pZGFAIS1CVFZbXURGVUdnb3E+dUNqTDRZY0I1J3RWMz9TbyVPJmoxOmVvaFI3PGJaVWlXSC00OGAzN2RfXDNYIkxDXTJedDUrZ0lmZHNFXzIrNGc4Nz9BPnJQT2FDZ2U2PnBLVXBZVihBVWQlPDFrXmdCUi1cZmVKTCNROUpdVztJOT1FbU4sS0JYUU9fPU1DYmZFOmRoWllwSl0yTEw/PSRLM1xDImVgOWRCailNVFhJRmk0Qy1kS2dYUERNSF0hP1lwImNqOUxnPiJnaD1aZjxzNWFeR1twPispOjk9ZzJLMWw7I2ojOis2LGQlTl1uTz1MNSdPOVI6NVNMT1ZKPWw1JlElOz01JSk5XGNHNzVpX1BwTChUQCRVTSJCUHRDPG4xV3I6KSxVZCpcQywvZiNmX3AuVlQ3VWVmWVs/cUE/MCNLa28nKzMtJWFcbVhJcjJURXQlQF8ncjxTK1xLPVtcbW4qRCRkX11pOTsvO242SmhcaGZnR1huMnBVcSd1JlhgZVA9X2RbMTtCMz0kLT9bVjA/ZyFnTWZzQFxKXi9SYnI8STJQJ0dbXFZjJU9fV1lTUyVbMjAzV0hoNT9jOkpxXyNTXWBndD9xRlpGWiwwZENxdW8oa1BOR1E4JTRqcXFVNFgnY1BjJVheWyQ/bWNMI2hDJUZZNklxVmxTNkxfUVVvNlBQL2ZMYTRiVSdaQmJmKENdOCdeRihUSTZrX09vZjdAWEhIb29RV0FkO1s5N0ZTNzonZlgwKmo3KjBlL2RsOFoxLmhCcThIcDdWVVlSXCFOaXE5Jy5Tc0QmLTptT2l0aj5QXFtCaV9aKj9tSnQyJztAXzQ4PS5UUGwocWNEQGRhJWUnQVsrNE0qbmUxO2JnPzVaIUJtU29PcVNISzQ8P1YySWhla0k1Z0hBM2NJYSVyYFZbV3FLSmUiaDprTyRXbyZwWCt0Ikx1TDtgbGtIK0JlZDN0R0ovXVYzNU1jWkNjKWtUUGYkUiZWM1cuSktXJU0+WSllUUtYXFdINlI4ZWJPYzdaaFosZVxFSShwTk9qY2Q/MnAySS49SExZT1Q7UVpFaHJSckdodHVuSVMtRm1JQF9vKy04MkIscmspbnRfcy00ZmBNOT07TlltP09ZYT5jLnUkSiprSFA6c19OXTNFdFpqaDMiMlMoST8sInA/aCxyY0phUCZJUkYvbWVPUWFZXjhNbi9xclc9XFAiTm4kYlg5SztFWD9yWjc3U2hsYVhOUVsnVTY2alAjbSpJYGM3Kmk/YyEiYTpPc2ZLKFs5LT0iMD5PLThDKS1caDhMJ1VMY11XKj1WdVNAMCFgM2c6RlNiQ0w2LktaPidWR1RNdCNLKi86Z0IvcVwtNzxOPVZzPzZFT08oZ1FQZS8pTSJOQ1N0aE5bTyw5KC9waj5RS1BjLEVqNlQmN18rb28yWlFwOEcwUkM+dF4yYTNQaDAuX0I1Y200XVZuLkRESFVkSFJXJCoySGQzRipjUFVOT0RQRVwzYyZQdW81WiUhTmtcPVkvU1lQbyVLZCU0U34+ZW5kc3RyZWFtCmVuZG9iagp4cmVmCjAgMTMKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDYxIDAwMDAwIG4gCjAwMDAwMDAxMTIgMDAwMDAgbiAKMDAwMDAwMDIxOSAwMDAwMCBuIAowMDAwMDAwMzMxIDAwMDAwIG4gCjAwMDAwMDA1MTMgMDAwMDAgbiAKMDAwMDAwMDY5NyAwMDAwMCBuIAowMDAwMDAwOTAwIDAwMDAwIG4gCjAwMDAwMDEwMTUgMDAwMDAgbiAKMDAwMDAwMTI1MCAwMDAwMCBuIAowMDAwMDAxMzE5IDAwMDAwIG4gCjAwMDAwMDE2MDkgMDAwMDAgbiAKMDAwMDAwMTY2OSAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9JRCAKWzw5YzU3Y2YxYjQ2YzA2MDhlZjQ5ODhhMjlhMWRkODI3Nj48OWM1N2NmMWI0NmMwNjA4ZWY0OTg4YTI5YTFkZDgyNzY+XQolIFJlcG9ydExhYiBnZW5lcmF0ZWQgUERGIGRvY3VtZW50IC0tIGRpZ2VzdCAob3BlbnNvdXJjZSkKCi9JbmZvIDEwIDAgUgovUm9vdCA5IDAgUgovU2l6ZSAxMwo+PgpzdGFydHhyZWYKNTU1MgolJUVPRgo=',B=document.querySelectorAll('.cv-btn'),D=null,N='CV_Samah_Boudallaa.pdf';
+function blob(){var s=atob(CV),a=new Uint8Array(s.length);for(var i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return new Blob([a],{type:'application/pdf'})}
+function direct(){var u=URL.createObjectURL(blob()),a=document.createElement('a');a.href=u;a.download=N;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000)}
+B.forEach(function(b){b.onclick=function(){if(D){D.save({filename:N,data:blob()}).catch(function(){})}else{direct()}}});
+if(window.claude&&claude.use)claude.use('downloads').then(function(d){D=d}).catch(function(){})})();</script>
+</body>
+</html>
